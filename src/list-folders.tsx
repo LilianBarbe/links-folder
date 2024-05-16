@@ -1,5 +1,15 @@
 // list-folders.tsx
-import { List, ActionPanel, Action, useNavigation, confirmAlert, showToast, Toast, popToRoot } from "@raycast/api";
+import {
+  List,
+  ActionPanel,
+  Action,
+  Alert,
+  useNavigation,
+  confirmAlert,
+  showToast,
+  Toast,
+  popToRoot,
+} from "@raycast/api";
 import { FolderProvider, useFolders } from "./context";
 
 // Assurez-vous que le `FolderProvider` enveloppe correctement `ProjectList`
@@ -12,10 +22,13 @@ function ProjectList() {
       title: "Supprimer le dossier",
       message: `Êtes-vous sûr de vouloir supprimer le dossier ${folderName} ?`,
       primaryAction: {
+        onAction: () => {
+          console.log("test");
+        },
         title: "Supprimer",
-        style: Toast.Style.Failure,
       },
-    };
+      style: Action.Style.Destructive, // Utiliser Action.Style.Destructive ici
+    } as Alert.Options;
 
     const result = await confirmAlert(options);
     if (result) {
@@ -66,9 +79,10 @@ function LinkList({ folder }: { folder: { name: string; links: { title: string; 
       title: "Supprimer le lien",
       message: `Êtes-vous sûr de vouloir supprimer ce lien ?`,
       primaryAction: {
+        onAction: () => {},
         title: "Supprimer",
-        style: Toast.Style.Failure,
       },
+      style: Action.Style.Destructive, // Utiliser Action.Style.Destructive ici aussi
     };
 
     const result = await confirmAlert(options);
