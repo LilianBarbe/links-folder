@@ -4,9 +4,10 @@ import { readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
 // Type pour un lien
-type Link = {
+export type Link = {
   title: string;
-  url: string;
+  linkType: string;
+  link: string;
   folder: string;
 };
 
@@ -20,7 +21,7 @@ type FolderContextType = {
   folders: Folder[];
   addLink: (link: Link) => void;
   deleteFolder: (folderName: string) => void;
-  deleteLink: (folderName: string, linkUrl: string) => void;
+  deleteLink: (folderName: string, inputLink: string) => void;
 };
 
 // Chemin du fichier de stockage des dossiers et des liens
@@ -61,11 +62,11 @@ export function FolderProvider({ children }: { children: ReactNode }) {
     });
   }
 
-  function deleteLink(folderName: string, linkUrl: string) {
+  function deleteLink(folderName: string, inputLink: string) {
     setFolders((prevFolders) => {
       const updatedFolders = prevFolders.map((folder) => {
         if (folder.name === folderName) {
-          const updatedLinks = folder.links.filter((link) => link.url !== linkUrl);
+          const updatedLinks = folder.links.filter((link) => link.link !== inputLink);
           return { ...folder, links: updatedLinks };
         }
         return folder;
