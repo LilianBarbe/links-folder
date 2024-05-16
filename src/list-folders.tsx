@@ -1,5 +1,5 @@
 // list-folders.tsx
-import { List, ActionPanel, Action, useNavigation, confirmAlert, showToast, ToastStyle, popToRoot } from "@raycast/api";
+import { List, ActionPanel, Action, useNavigation, confirmAlert, showToast, Toast, popToRoot } from "@raycast/api";
 import { FolderProvider, useFolders } from "./context";
 
 // Assurez-vous que le `FolderProvider` enveloppe correctement `ProjectList`
@@ -13,14 +13,14 @@ function ProjectList() {
       message: `Êtes-vous sûr de vouloir supprimer le dossier ${folderName} ?`,
       primaryAction: {
         title: "Supprimer",
-        style: ToastStyle.Destruction,
+        style: Toast.Style.Failure,
       },
     };
 
     const result = await confirmAlert(options);
     if (result) {
       deleteFolder(folderName);
-      showToast({ title: "Dossier supprimé", style: ToastStyle.Success });
+      showToast({ title: "Dossier supprimé", style: Toast.Style.Success });
       popToRoot();
     }
   }
@@ -67,14 +67,14 @@ function LinkList({ folder }: { folder: { name: string; links: { title: string; 
       message: `Êtes-vous sûr de vouloir supprimer ce lien ?`,
       primaryAction: {
         title: "Supprimer",
-        style: ToastStyle.Destruction,
+        style: Toast.Style.Failure,
       },
     };
 
     const result = await confirmAlert(options);
     if (result) {
       deleteLink(folderName, linkUrl);
-      showToast({ title: "Lien supprimé", style: ToastStyle.Success });
+      showToast({ title: "Lien supprimé", style: Toast.Style.Success });
       popToRoot(); // Retourner à l'écran précédent après la suppression
     }
   }
