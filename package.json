@@ -12,14 +12,22 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "index",
+      "name": "add-link",
       "title": "Ajouter un lien",
       "description": "Template for submitting a form",
       "mode": "view"
+    },
+    {
+      "name": "list-folders",
+      "title": "Voir-dossiers",
+      "description": "Voir les dossiers",
+      "mode": "view",
+      "icon": "command-icon.png"
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.74.0"
+    "@raycast/api": "^1.74.0",
+    "open": "^10.1.0"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^1.0.6",
