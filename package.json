@@ -15,12 +15,14 @@
       "name": "add-link",
       "title": "Ajouter un lien",
       "description": "Template for submitting a form",
+      "subtitle": "Ajouter un lien à un dossier",
       "mode": "view"
     },
     {
       "name": "list-folders",
-      "title": "Voir-dossiers",
+      "title": "Voir les dossiers",
       "description": "Voir les dossiers",
+      "subtitle": "Voir les dossiers existants",
       "mode": "view",
       "icon": "command-icon.png"
     }

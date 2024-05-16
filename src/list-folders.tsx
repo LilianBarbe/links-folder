@@ -85,6 +85,7 @@ function LinkList({ folder }: { folder: { name: string; links: { title: string; 
         <List.Item
           key={link.url}
           title={link.title}
+          subtitle={new URL(link.url).hostname} // Afficher uniquement le nom de domaine
           actions={
             <ActionPanel>
               <Action.OpenInBrowser url={link.url} />
