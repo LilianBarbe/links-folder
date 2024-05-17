@@ -1,15 +1,5 @@
 // list-folders.tsx
-import {
-    List,
-    ActionPanel,
-    Action,
-    Alert,
-    useNavigation,
-    confirmAlert,
-    showToast,
-    Toast,
-    popToRoot
-} from "@raycast/api";
+import { Action, ActionPanel, Alert, confirmAlert, List, showToast, Toast, useNavigation } from "@raycast/api";
 import { FolderProvider, useFolders } from "./context";
 import { links } from "./links-class/LinkRegistar";
 
