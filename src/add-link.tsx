@@ -18,8 +18,9 @@ function AddLinkForm() {
     }, [folders]);
 
     useEffect(() => {
-        for (const key in links) {
-            if (links[key].is(link)) {
+        for (const [key, value] of Object.entries(links)) {
+            if (value.is(link)) {
+                console.log("is ", key);
                 setLinkType(key);
             }
         }
