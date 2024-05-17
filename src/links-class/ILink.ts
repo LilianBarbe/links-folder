@@ -1,7 +1,7 @@
+import { JSX } from "react";
 import { Link } from "../context";
 
 export default interface ILink {
     is(link: string): boolean;
-    setLink(link: Link): ILink;
-    render(): any;
+    render(link: Link): JSX.Element|null;
 }

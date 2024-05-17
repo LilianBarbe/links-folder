@@ -11,7 +11,7 @@ import {
     popToRoot
 } from "@raycast/api";
 import { FolderProvider, useFolders } from "./context";
-import { links } from "./links/LinkRegistar";
+import { links } from "./links-class/LinkRegistar";
 
 // Assurez-vous que le `FolderProvider` enveloppe correctement `ProjectList`
 function ProjectList() {
@@ -72,32 +72,32 @@ function ProjectList() {
 }
 
 function LinkList({ folder }: { folder: { name: string; links: { title: string; linkType: string, link: string; folder: string }[] } }) {
-    const { deleteLink } = useFolders();
+    // const { deleteLink } = useFolders();
 
-    async function handleDelete(folderName: string, linkUrl: string) {
-        const options = {
-            title: "Supprimer le lien",
-            message: `Êtes-vous sûr de vouloir supprimer ce lien ?`,
-            primaryAction: {
-                onAction: () => {
-                },
-                title: "Supprimer"
-            },
-            style: Action.Style.Destructive // Utiliser Action.Style.Destructive ici aussi
-        };
-
-        const result = await confirmAlert(options);
-        if (result) {
-            deleteLink(folderName, linkUrl);
-            showToast({ title: "Lien supprimé", style: Toast.Style.Success });
-            popToRoot(); // Retourner à l'écran précédent après la suppression
-        }
-    }
+    // async function handleDelete(folderName: string, linkUrl: string) {
+    //     const options = {
+    //         title: "Supprimer le lien",
+    //         message: `Êtes-vous sûr de vouloir supprimer ce lien ?`,
+    //         primaryAction: {
+    //             onAction: () => {
+    //             },
+    //             title: "Supprimer"
+    //         },
+    //         style: Action.Style.Destructive // Utiliser Action.Style.Destructive ici aussi
+    //     };
+    //
+    //     const result = await confirmAlert(options);
+    //     if (result) {
+    //         deleteLink(folderName, linkUrl);
+    //         showToast({ title: "Lien supprimé", style: Toast.Style.Success });
+    //         popToRoot(); // Retourner à l'écran précédent après la suppression
+    //     }
+    // }
 
     return (
         <List navigationTitle={`Liens dans le projet ${folder.name}`}>
             {folder.links.map((link) => (
-                links[link.linkType].setLink(link).render()
+                links[link.linkType].render(link)
             ))}
         </List>
     );
