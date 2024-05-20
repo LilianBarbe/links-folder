@@ -6,7 +6,6 @@ import { links } from "./links-class/LinkRegistar";
 // Assurez-vous que le `FolderProvider` enveloppe correctement `ProjectList`
 function ProjectList() {
   const { folders, deleteFolder } = useFolders();
-  const { setFolder } = useFolders();
   const { push } = useNavigation();
 
   async function handleDelete(folderName: string) {
@@ -32,10 +31,9 @@ function ProjectList() {
   function handleProjectSelect(folderName: string) {
     const selectedFolder = folders.find((folder) => folder.name === folderName);
     if (selectedFolder) {
-      setFolder(selectedFolder);
       push(
         <FolderProvider>
-          <LinkList />
+          <LinkList folder={selectedFolder} />
         </FolderProvider>,
       );
     }
@@ -63,11 +61,10 @@ function ProjectList() {
   );
 }
 
-function LinkList() {
-  const {folder} = useFolders();
+function LinkList({ folder }: { folder: { name: string; links: { title: string; linkType: string; link: string; folder: string }[] }; }) {
   return (
-    <List navigationTitle={`Liens dans le projet ${folder?.name}`}>
-      {folder?.links.map((link) => links[link.linkType].render(link))}
+    <List navigationTitle={`Liens dans le projet ${folder.name}`}>
+      {folder.links.map((link) => links[link.linkType].render(link))}
     </List>
   );
 }
