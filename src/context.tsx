@@ -1,5 +1,5 @@
 // context.tsx
-import React, { createContext, useState, useContext, useEffect, ReactNode } from "react";
+import React, { createContext, useState, useContext, useEffect, ReactNode, Dispatch, SetStateAction } from "react";
 import { readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
@@ -19,6 +19,8 @@ type Folder = {
 
 type FolderContextType = {
     folders: Folder[];
+    folder: Folder | null,
+    setFolder: Dispatch<SetStateAction<Folder | null>>,
     addLink: (link: Link) => void;
     deleteFolder: (folderName: string) => void;
     deleteLink: (folderName: string, inputLink: string) => void;
@@ -32,6 +34,7 @@ const FolderContext = createContext<FolderContextType | undefined>(undefined);
 
 export function FolderProvider({ children }: { children: ReactNode }) {
     const [folders, setFolders] = useState<Folder[]>([]);
+    const [folder, setFolder] = useState<Folder | null>(null);
 
     function addLink(link: Link) {
         setFolders((prevFolders) => {
@@ -67,6 +70,7 @@ export function FolderProvider({ children }: { children: ReactNode }) {
             const updatedFolders = prevFolders.map((folder) => {
                 if (folder.name === folderName) {
                     const updatedLinks = folder.links.filter((link) => link.link !== inputLink);
+                    setFolder({ ...folder, links: updatedLinks })
                     return { ...folder, links: updatedLinks };
                 }
                 return folder;
@@ -95,10 +99,10 @@ export function FolderProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         loadFromFile();
-    }, []);
+    }, [folders]);
 
     return (
-        <FolderContext.Provider value={{ folders, addLink, deleteFolder, deleteLink }}>{children}</FolderContext.Provider>
+        <FolderContext.Provider value={{ folders, folder, setFolder, addLink, deleteFolder, deleteLink }}>{children}</FolderContext.Provider>
     );
 }
 
