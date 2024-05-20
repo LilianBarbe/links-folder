@@ -1,4 +1,4 @@
-import { Action, ActionPanel, confirmAlert, List, popToRoot, showToast, Toast } from "@raycast/api";
+import { Action, ActionPanel, confirmAlert, List, showToast, Toast } from "@raycast/api";
 import { JSX } from "react";
 import { useFolders } from "../context";
 
