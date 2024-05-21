@@ -1,9 +1,9 @@
-import { Action, ActionPanel, confirmAlert, List, showToast, Toast } from "@raycast/api";
-import { JSX, useState } from "react";
-import { useFolders } from "../context";
+import { Action, ActionPanel, confirmAlert, Icon, Keyboard, List, showToast, Toast } from "@raycast/api";
+import { JSX } from "react";
+import { Link, useFolders } from "../context";
+import AddLinkCommand from "../add-link";
 
-export const BaseLink = (props: any): JSX.Element => {
-
+export const BaseLink = (props: { link: Link, subtitle: string, children: JSX.Element }): JSX.Element => {
     const { deleteLink } = useFolders();
 
     async function handleDelete(folderName: string, linkUrl: string) {
@@ -36,6 +36,12 @@ export const BaseLink = (props: any): JSX.Element => {
                         title="Supprimer le lien"
                         style={Action.Style.Destructive}
                         onAction={() => handleDelete(props.link.folder, props.link.link)}
+                    />
+                    <Action.Push
+                        title="Editer le lien"
+                        icon={Icon.Pencil}
+                        target={<AddLinkCommand link={props.link} />}
+                        shortcut={Keyboard.Shortcut.Common.Edit}
                     />
                 </ActionPanel>
             }
