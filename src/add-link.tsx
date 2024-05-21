@@ -1,7 +1,7 @@
 import { Action, ActionPanel, Form, popToRoot, showToast } from "@raycast/api";
 import { FolderProvider, useFolders } from "./context";
 import { useEffect, useState } from "react";
-import { links } from "./links-class/LinkRegistar";
+import { linksComponents } from "./links-class/LinkRegistar";
 
 function AddLinkForm() {
     const { folders, addLink } = useFolders();
@@ -18,7 +18,7 @@ function AddLinkForm() {
     }, [folders]);
 
     useEffect(() => {
-        for (const [key, value] of Object.entries(links)) {
+        for (const [key, value] of Object.entries(linksComponents)) {
             if (value.is(link)) {
                 console.log("is ", key);
                 setLinkType(key);

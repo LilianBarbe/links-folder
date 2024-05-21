@@ -1,10 +1,11 @@
 import { Action, ActionPanel, confirmAlert, List, showToast, Toast } from "@raycast/api";
-import { JSX } from "react";
+import { JSX, useState } from "react";
 import { useFolders } from "../context";
 
-export const BaseLink = (props: any): JSX.Element => {
+export const BaseLink = (props: any): JSX.Element | null => {
 
     const { deleteLink } = useFolders();
+    const [ display, setDisplay ] = useState<boolean>(true);
 
     async function handleDelete(folderName: string, linkUrl: string) {
         const options = {
@@ -26,7 +27,7 @@ export const BaseLink = (props: any): JSX.Element => {
     }
 
     return (
-        <List.Item
+        display ? <List.Item
             title={props.link.title}
             subtitle={props.subtitle}
             actions={
@@ -39,6 +40,6 @@ export const BaseLink = (props: any): JSX.Element => {
                     />
                 </ActionPanel>
             }
-        />
+        /> : null
     );
 };

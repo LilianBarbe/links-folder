@@ -6,7 +6,7 @@ interface Components {
     [key: string]: ILink
 }
 
-export const links: Components = {
+export const linksComponents: Components = {
     url: new Url(),
     path: new Path()
 }

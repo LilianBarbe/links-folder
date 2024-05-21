@@ -1,6 +1,6 @@
 import { Action, ActionPanel, Alert, confirmAlert, List, showToast, Toast, useNavigation } from "@raycast/api";
 import { FolderProvider, useFolders } from "./context";
-import { links } from "./links-class/LinkRegistar";
+import { linksComponents } from "./links-class/LinkRegistar";
 
 // Assurez-vous que le `FolderProvider` enveloppe correctement `ProjectList`
 function ProjectList() {
@@ -29,8 +29,13 @@ function ProjectList() {
 
     function handleProjectSelect(folderName: string) {
         const selectedFolder = folders.find((folder) => folder.name === folderName);
+
         if (selectedFolder) {
-            push(<LinkList folder={selectedFolder} />);
+            push(
+                <FolderProvider>
+                    <LinkList folder={selectedFolder} />
+                </FolderProvider>
+            );
         }
     }
 
@@ -57,9 +62,12 @@ function ProjectList() {
 }
 
 function LinkList({ folder }: { folder: { name: string; links: { title: string; linkType: string; link: string; folder: string }[] }; }) {
+    const { getLinks } = useFolders();
+    const links = getLinks(folder.name);
+
     return (
         <List navigationTitle={`Liens dans le projet ${folder.name}`}>
-            {folder.links.map((link) => links[link.linkType].render(link))}
+            {links?.map((link) => linksComponents[link.linkType].render(link))}
         </List>
     );
 }

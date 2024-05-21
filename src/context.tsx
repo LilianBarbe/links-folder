@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useContext, useEffect, useState } from
 import { readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
 
-// Type pour un lien
+// Type for a link
 export type Link = {
     title: string;
     linkType: string;
@@ -10,7 +10,7 @@ export type Link = {
     folder: string;
 };
 
-// Type pour un dossier
+// Type for a folder
 type Folder = {
     name: string;
     links: Link[];
@@ -21,12 +21,13 @@ type FolderContextType = {
     addLink: (link: Link) => void;
     deleteFolder: (folderName: string) => void;
     deleteLink: (folderName: string, inputLink: string) => void;
+    getLinks: (folderName: string) => Link[] | undefined;
 };
 
-// Chemin du fichier de stockage des dossiers et des liens
+// Path to the storage file
 const FILE_PATH = resolve(__dirname, "storage.json");
 
-// Créer le contexte
+// Create the context
 const FolderContext = createContext<FolderContextType | undefined>(undefined);
 
 export function FolderProvider({ children }: { children: ReactNode }) {
@@ -75,6 +76,11 @@ export function FolderProvider({ children }: { children: ReactNode }) {
         });
     }
 
+    function getLinks(folderName: string): Link[] | undefined {
+        const folder = folders.find((folder) => folder.name === folderName);
+        return folder ? folder.links : undefined;
+    }
+
     function saveToFile(folders: Folder[]) {
         try {
             writeFileSync(FILE_PATH, JSON.stringify(folders, null, 2));
@@ -97,7 +103,9 @@ export function FolderProvider({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <FolderContext.Provider value={{ folders, addLink, deleteFolder, deleteLink }}>{children}</FolderContext.Provider>
+        <FolderContext.Provider value={{ folders, addLink, deleteFolder, deleteLink, getLinks }}>
+            {children}
+        </FolderContext.Provider>
     );
 }
 
