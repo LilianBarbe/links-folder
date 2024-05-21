@@ -2,10 +2,9 @@ import { Action, ActionPanel, confirmAlert, List, showToast, Toast } from "@rayc
 import { JSX, useState } from "react";
 import { useFolders } from "../context";
 
-export const BaseLink = (props: any): JSX.Element | null => {
+export const BaseLink = (props: any): JSX.Element => {
 
     const { deleteLink } = useFolders();
-    const [ display, setDisplay ] = useState<boolean>(true);
 
     async function handleDelete(folderName: string, linkUrl: string) {
         const options = {
@@ -27,7 +26,7 @@ export const BaseLink = (props: any): JSX.Element | null => {
     }
 
     return (
-        display ? <List.Item
+        <List.Item
             title={props.link.title}
             subtitle={props.subtitle}
             actions={
@@ -40,6 +39,6 @@ export const BaseLink = (props: any): JSX.Element | null => {
                     />
                 </ActionPanel>
             }
-        /> : null
+        />
     );
 };
