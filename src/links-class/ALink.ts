@@ -1,5 +1,5 @@
 import ILink from "./ILink";
-import { Component, JSX } from "react";
+import { JSX } from "react";
 
 type Link = {
     title: string;

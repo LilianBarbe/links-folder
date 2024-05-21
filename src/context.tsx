@@ -1,4 +1,3 @@
-// context.tsx
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
@@ -70,7 +69,7 @@ export function FolderProvider({ children }: { children: ReactNode }) {
                     return { ...folder, links: updatedLinks };
                 }
                 return folder;
-            });
+            }).filter(folder => folder.links.length > 0); // remove empty folders
             saveToFile(updatedFolders);
             return updatedFolders;
         });
@@ -95,8 +94,7 @@ export function FolderProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         loadFromFile();
-        console.log("Use effect folders");
-    }, [folders]);
+    }, []);
 
     return (
         <FolderContext.Provider value={{ folders, addLink, deleteFolder, deleteLink }}>{children}</FolderContext.Provider>
