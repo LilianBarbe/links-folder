@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { Link } from "../context";
+import { Link } from "../types/Types";
 
 export default interface ILink {
     is(link: string): boolean;

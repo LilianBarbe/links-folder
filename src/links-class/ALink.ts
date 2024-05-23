@@ -1,12 +1,6 @@
 import ILink from "./ILink";
 import { JSX } from "react";
-
-type Link = {
-    title: string;
-    linkType: string;
-    link: string;
-    folder: string;
-};
+import { Link } from "../types/Types";
 
 export abstract class ALink implements ILink{
 
