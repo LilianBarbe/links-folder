@@ -4,24 +4,26 @@ import { useEffect, useState } from "react";
 import { linksComponents } from "./links-class/LinkRegistar";
 
 function AddLinkForm(props: { linkData: Link | null }) {
-    const { folders, addLink } = useFolders();
-    const [selectedFolder, setSelectedFolder] = useState<string | null>(null);
-    const [newFolderName, setNewFolderName] = useState("");
-    const [link, setLink] = useState("");
-    const [linkType, setLinkType] = useState("");
+    const { folders, addLink, editLink } = useFolders();
     const { linkData } = props;
+    const [selectedFolder, setSelectedFolder] = useState<string | undefined>(linkData?.folder);
+    const [newFolderName, setNewFolderName] = useState("");
+    const [link, setLink] = useState(linkData ? linkData.link : "");
+    const [linkType, setLinkType] = useState("");
 
-    // Mettre à jour le dossier sélectionné par défaut (le dernier ajouté)
     useEffect(() => {
         if (folders.length > 0) {
-            setSelectedFolder(folders[folders.length - 1].name);
+            if (linkData?.folder) {
+                setSelectedFolder(linkData.folder);
+            } else {
+                setSelectedFolder(folders[folders.length - 1].name);
+            }
         }
     }, [folders]);
 
     useEffect(() => {
         for (const [key, value] of Object.entries(linksComponents)) {
             if (value.is(link)) {
-                console.log("is ", key);
                 setLinkType(key);
             }
         }
@@ -29,12 +31,24 @@ function AddLinkForm(props: { linkData: Link | null }) {
 
     function handleAddLink(values: { title: string; linkType: string; link: string; folder: string }) {
         const folderName = selectedFolder === "new" ? newFolderName : selectedFolder;
-        const newLink = { title: values.title, linkType: linkType, link: link, folder: folderName! }; // Compiler sans erreur possible
-        addLink(newLink);
-        showToast({ title: "Lien sauvegardé !", message: "Lien ajouté au dossier" });
+        const newLink = { title: values.title, linkType: linkType, link: link, folder: folderName! };
+        if (linkData) {
+            editLink(folderName, linkData.folder, newLink);
+            showToast({ title: "Lien mis à jour !", message: "Lien mis à jour dans le dossier" });
+        } else {
+            addLink(newLink);
+            showToast({ title: "Lien sauvegardé !", message: "Lien ajouté au dossier" });
+        }
 
-        // Retourné à l'état initial de Raycast après la soumission
         popToRoot({ clearSearchBar: true });
+    }
+
+    if (folders.length === 0 && linkData) {
+        return (
+            <Form>
+                <Form.Description text="Loading folders..." />
+            </Form>
+        )
     }
 
     return (
@@ -47,22 +61,27 @@ function AddLinkForm(props: { linkData: Link | null }) {
         >
             <Form.Description text="Ajouter un lien dans un dossier." />
             <Form.TextField id="title" title="Nom" placeholder="Nom" defaultValue={linkData?.title} />
-            <Form.TextField id="url" title="Lien Url" placeholder="Entrez le lien" defaultValue={linkData ? linkData.link : ""}
-                            onChange={(newValue) => setLink(newValue)} />
+            <Form.TextField
+                id="url"
+                title="Lien Url"
+                placeholder="Entrez le lien"
+                defaultValue={linkData ? linkData.link : ""}
+                onChange={(newValue) => setLink(newValue)}
+            />
 
             <Form.Dropdown
                 id="folder"
                 title="Dossier"
-                value={linkData ? linkData.folder : (selectedFolder ?? "")}
+                value={selectedFolder ?? ""}
                 onChange={(newValue) => setSelectedFolder(newValue)}
             >
+                <Form.Dropdown.Item value="new" title="Créer un nouveau dossier" />
                 {folders.map((folder) => (
                     <Form.Dropdown.Item key={folder.name} value={folder.name} title={folder.name} />
                 ))}
-                <Form.Dropdown.Item value="new" title="Créer un nouveau dossier" />
             </Form.Dropdown>
 
-            {selectedFolder === "new" && (
+            {(selectedFolder === "new") && (
                 <Form.TextField
                     id="newFolderName"
                     title="Nom du nouveau dossier"
@@ -75,7 +94,7 @@ function AddLinkForm(props: { linkData: Link | null }) {
     );
 }
 
-export default function AddLinkCommand(props: {link: Link | null}) {
+export default function AddLinkCommand(props: { link: Link | null }) {
     return (
         <FolderProvider>
             <AddLinkForm linkData={props.link} />
