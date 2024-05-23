@@ -38,6 +38,16 @@ function ProjectList() {
             );
         }
     }
+    //
+    // if (folders.length === 0) {
+    //     return (
+    //         <List>
+    //             <List.Item
+    //                 title={"No folders"}
+    //             />
+    //         </List>
+    //     )
+    // }
 
     return (
         <List>
@@ -45,6 +55,7 @@ function ProjectList() {
                 <List.Item
                     key={folder.name}
                     title={folder.name}
+                    subtitle={folder.links.length + " liens"}
                     actions={
                         <ActionPanel>
                             <Action title="Voir les liens" onAction={() => handleProjectSelect(folder.name)} />

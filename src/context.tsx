@@ -21,8 +21,9 @@ type FolderContextType = {
     addLink: (link: Link) => void;
     deleteFolder: (folderName: string) => void;
     deleteLink: (folderName: string, inputLink: string) => void;
-    editLink: (folderName: string|undefined, previousFolder: string, inputLink: Link) => void;
+    editLink: (folderName: string | undefined, previousFolder: string, inputLink: Link) => void;
     getLinks: (folderName: string) => Link[] | undefined;
+    linkExist: (link: string) => boolean;
 };
 
 // Path to the storage file
@@ -82,12 +83,22 @@ export function FolderProvider({ children }: { children: ReactNode }) {
         return folder ? folder.links : undefined;
     }
 
-    function editLink(folderName: string|undefined, previousFolder: string, updatedLink: Link) {
+    function linkExist(link: string): boolean {
+        let res = false;
+        folders.forEach((folder) => {
+            if (folder.links.some((f) => f.link === link)) {
+                res = true;
+            }
+        });
+        return res;
+    }
+
+    function editLink(folderName: string | undefined, previousFolder: string, updatedLink: Link) {
         setFolders((prevFolders) => {
             const updatedFolders = prevFolders.map((folder) => {
                 if (folder.name === folderName && folder.name === previousFolder) {
                     const updatedLinks = folder.links.map((link) =>
-                        link.link === updatedLink.link ? link : updatedLink
+                        link.link !== updatedLink.link ? updatedLink : link
                     );
                     return { ...folder, links: updatedLinks };
                 } else if (folderName && folder.name === folderName) {
@@ -106,7 +117,7 @@ export function FolderProvider({ children }: { children: ReactNode }) {
                     if (linkToDelete !== -1) {
                         folder.links.splice(linkToDelete, 1);
                     }
-                })
+                });
             }
 
             saveToFile(updatedFolders);
@@ -136,7 +147,7 @@ export function FolderProvider({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <FolderContext.Provider value={{ folders, addLink, editLink, deleteFolder, deleteLink, getLinks }}>
+        <FolderContext.Provider value={{ folders, addLink, editLink, deleteFolder, deleteLink, getLinks, linkExist }}>
             {children}
         </FolderContext.Provider>
     );

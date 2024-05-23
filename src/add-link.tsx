@@ -1,15 +1,17 @@
-import { Action, ActionPanel, Form, popToRoot, showToast } from "@raycast/api";
+import { Action, ActionPanel, Form, popToRoot, showToast, useNavigation } from "@raycast/api";
 import { FolderProvider, Link, useFolders } from "./context";
 import { useEffect, useState } from "react";
 import { linksComponents } from "./links-class/LinkRegistar";
 
 function AddLinkForm(props: { linkData: Link | null }) {
-    const { folders, addLink, editLink } = useFolders();
+    const { folders, addLink, editLink, linkExist } = useFolders();
     const { linkData } = props;
     const [selectedFolder, setSelectedFolder] = useState<string | undefined>(linkData?.folder);
     const [newFolderName, setNewFolderName] = useState("");
     const [link, setLink] = useState(linkData ? linkData.link : "");
     const [linkType, setLinkType] = useState("");
+    const [linkError, setLinkError] = useState<string | undefined>();
+    const { pop } = useNavigation();
 
     useEffect(() => {
         if (folders.length > 0) {
@@ -29,9 +31,20 @@ function AddLinkForm(props: { linkData: Link | null }) {
         }
     }, [link]);
 
+    function dropLinkErrorIfNeeded() {
+        if (linkError && linkError.length > 0) {
+            setLinkError(undefined);
+        }
+    }
+
     function handleAddLink(values: { title: string; linkType: string; link: string; folder: string }) {
         const folderName = selectedFolder === "new" ? newFolderName : selectedFolder;
         const newLink = { title: values.title, linkType: linkType, link: link, folder: folderName! };
+
+        if (linkExist(link) && !linkData) {
+            return;
+        }
+
         if (linkData) {
             editLink(folderName, linkData.folder, newLink);
             showToast({ title: "Lien mis à jour !", message: "Lien mis à jour dans le dossier" });
@@ -39,8 +52,7 @@ function AddLinkForm(props: { linkData: Link | null }) {
             addLink(newLink);
             showToast({ title: "Lien sauvegardé !", message: "Lien ajouté au dossier" });
         }
-
-        popToRoot({ clearSearchBar: true });
+        pop();
     }
 
     if (folders.length === 0 && linkData) {
@@ -48,7 +60,7 @@ function AddLinkForm(props: { linkData: Link | null }) {
             <Form>
                 <Form.Description text="Loading folders..." />
             </Form>
-        )
+        );
     }
 
     return (
@@ -66,7 +78,18 @@ function AddLinkForm(props: { linkData: Link | null }) {
                 title="Lien Url"
                 placeholder="Entrez le lien"
                 defaultValue={linkData ? linkData.link : ""}
-                onChange={(newValue) => setLink(newValue)}
+                onChange={(newValue) => {
+                    dropLinkErrorIfNeeded();
+                    setLink(newValue);
+                }}
+                error={linkError}
+                onBlur={(event) => {
+                    if (linkExist(event.target.value ?? "") && !linkData) {
+                        setLinkError("Ce lien existe déjà");
+                    } else {
+                        dropLinkErrorIfNeeded();
+                    }
+                }}
             />
 
             <Form.Dropdown
