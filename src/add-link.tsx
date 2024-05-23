@@ -1,7 +1,7 @@
-import { Action, ActionPanel, Form, popToRoot, showToast, useNavigation } from "@raycast/api";
+import { Action, ActionPanel, Form, showToast, useNavigation } from "@raycast/api";
 import { FolderProvider, useFolders } from "./context";
 import { useEffect, useState } from "react";
-import { linksComponents } from "./links-class/LinkRegistar";
+import { getComponentsInstance, typeToClassMap } from "./links-class/LinkRegistar";
 import { Link } from "./types/Types";
 
 function AddLinkForm(props: { linkData: Link | null }) {
@@ -10,7 +10,7 @@ function AddLinkForm(props: { linkData: Link | null }) {
     const [selectedFolder, setSelectedFolder] = useState<string | undefined>(linkData?.folder);
     const [newFolderName, setNewFolderName] = useState("");
     const [link, setLink] = useState(linkData ? linkData.link : "");
-    const [linkType, setLinkType] = useState("");
+    const [linkType, setLinkType] = useState<Type | null>(null);
     const [linkError, setLinkError] = useState<string | undefined>();
     const { pop } = useNavigation();
 
@@ -25,8 +25,8 @@ function AddLinkForm(props: { linkData: Link | null }) {
     }, [folders]);
 
     useEffect(() => {
-        for (const [key, value] of Object.entries(linksComponents)) {
-            if (value.is(link)) {
+        for (const [key, value] of Object.entries(typeToClassMap)) {
+            if (new value().is(link)) {
                 setLinkType(key);
             }
         }
@@ -40,7 +40,13 @@ function AddLinkForm(props: { linkData: Link | null }) {
 
     function handleAddLink(values: { title: string; linkType: string; link: string; folder: string }) {
         const folderName = selectedFolder === "new" ? newFolderName : selectedFolder;
-        const newLink = { title: values.title, linkType: linkType, link: link, folder: folderName! };
+
+        const newLink = {
+            title: values.title,
+            linkType: linkType,
+            link: getComponentsInstance(linkType).treatment(link),
+            folder: folderName!
+        };
 
         if (linkExist(link) && !linkData) {
             return;

@@ -22,6 +22,10 @@ export abstract class ALink implements ILink{
         return false;
     };
 
+    treatment(link: string): string {
+        return link;
+    }
+
     render(link: Link): JSX.Element|null {
         return null;
     }

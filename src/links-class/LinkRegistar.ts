@@ -1,12 +1,20 @@
 import Url from "./UrlClass";
 import Path from "./PathClass";
-import ILink from "./ILink";
+import { Link } from "../types/Types";
 
-interface Components {
-    [key: string]: ILink
+interface ConstructorMap {
+    [key: string]: new (value?: Link) => Url | Path;
 }
 
-export const linksComponents: Components = {
-    url: new Url(),
-    path: new Path()
+export const typeToClassMap: ConstructorMap = {
+    url: Url,
+    path: Path,
+};
+
+export function getComponentsInstance(type: string, link?: Link) {
+    const ClassConstructor = typeToClassMap[type];
+    if (!ClassConstructor) {
+        throw new Error(`Unknown type: ${type}`);
+    }
+    return new ClassConstructor(link);
 }
