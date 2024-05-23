@@ -10,7 +10,7 @@ function AddLinkForm(props: { linkData: Link | null }) {
     const [selectedFolder, setSelectedFolder] = useState<string | undefined>(linkData?.folder);
     const [newFolderName, setNewFolderName] = useState("");
     const [link, setLink] = useState(linkData ? linkData.link : "");
-    const [linkType, setLinkType] = useState<Type | null>(null);
+    const [linkType, setLinkType] = useState<string>("");
     const [linkError, setLinkError] = useState<string | undefined>();
     const { pop } = useNavigation();
 
