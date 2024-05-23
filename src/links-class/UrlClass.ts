@@ -1,7 +1,7 @@
 import { ALink } from "./ALink";
 import { JSX } from "react";
 import { Url } from "../link-components/Url";
-import { Link } from "../context";
+import { Link } from "../types/Types";
 
 export default class UrlClass extends ALink {
     is = (link: string): boolean => {

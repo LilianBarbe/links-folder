@@ -1,8 +1,8 @@
 import { Action } from "@raycast/api";
-import { Link } from "../context";
 import { JSX } from "react";
 import { BaseLink } from "./BaseLink";
 import { randomUUID } from "node:crypto";
+import { Link } from "../types/Types";
 
 export const Url = (link: Link): JSX.Element => {
     return (

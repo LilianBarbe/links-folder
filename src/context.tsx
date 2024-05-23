@@ -1,20 +1,7 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { readFileSync, writeFileSync } from "fs";
 import { resolve } from "path";
-
-// Type for a link
-export type Link = {
-    title: string;
-    linkType: string;
-    link: string;
-    folder: string;
-};
-
-// Type for a folder
-type Folder = {
-    name: string;
-    links: Link[];
-};
+import { Folder, Link } from "./types/Types";
 
 type FolderContextType = {
     folders: Folder[];

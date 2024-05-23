@@ -1,7 +1,8 @@
 import { Action, ActionPanel, confirmAlert, Icon, Keyboard, List, showToast, Toast } from "@raycast/api";
 import { JSX } from "react";
-import { Link, useFolders } from "../context";
 import AddLinkCommand from "../add-link";
+import { Link } from "../types/Types";
+import { useFolders } from "../context";
 
 export const BaseLink = (props: { link: Link, subtitle: string, children: JSX.Element }): JSX.Element => {
     const { deleteLink } = useFolders();

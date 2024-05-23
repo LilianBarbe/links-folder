@@ -1,7 +1,8 @@
 import { Action, ActionPanel, Form, popToRoot, showToast, useNavigation } from "@raycast/api";
-import { FolderProvider, Link, useFolders } from "./context";
+import { FolderProvider, useFolders } from "./context";
 import { useEffect, useState } from "react";
 import { linksComponents } from "./links-class/LinkRegistar";
+import { Link } from "./types/Types";
 
 function AddLinkForm(props: { linkData: Link | null }) {
     const { folders, addLink, editLink, linkExist } = useFolders();
