@@ -38,16 +38,6 @@ function ProjectList() {
             );
         }
     }
-    //
-    // if (folders.length === 0) {
-    //     return (
-    //         <List>
-    //             <List.Item
-    //                 title={"No folders"}
-    //             />
-    //         </List>
-    //     )
-    // }
 
     return (
         <List>
