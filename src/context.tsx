@@ -98,7 +98,7 @@ export function FolderProvider({ children }: { children: ReactNode }) {
             const updatedFolders = prevFolders.map((folder) => {
                 if (folder.name === folderName && folder.name === previousFolder) {
                     const updatedLinks = folder.links.map((link) =>
-                        link.link !== updatedLink.link ? updatedLink : link
+                        link.link === updatedLink.link ? updatedLink : link
                     );
                     return { ...folder, links: updatedLinks };
                 } else if (folderName && folder.name === folderName) {
